@@ -1,0 +1,37 @@
+{
+  "rules": {
+    "salas": {
+      ".read": true,
+      ".indexOn": ["creado"],
+      "$sala": {
+        ".write": "$sala.matches(/^[0-9]{4}$/)",
+        "jugadores": {
+          "$jugador": {
+            "nombre": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20"
+            },
+            "puntos": {
+              ".validate": "newData.isNumber() && newData.val() >= 0"
+            }
+          }
+        },
+        "respuestas": {
+          "$clave": {
+            "$jugador": {
+              ".validate": "!data.exists() && newData.hasChildren(['opcion', 'ts']) && newData.child('ts').val() == now",
+              "opcion": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 3"
+              },
+              "ts": {
+                ".validate": true
+              },
+              "$otro": {
+                ".validate": false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14052e">
+  <title>Jugar · Trivia del Cumple</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body class="jugador">
+  <header class="j-cabecera">
+    <span class="j-nombre" id="jNombre"></span>
+    <span class="j-puntos" id="jPuntos"></span>
+    <span class="j-conexion" id="jConexion" data-estado="conectando" title="Conexión"></span>
+  </header>
+
+  <main class="j-contenido">
+    <!-- Paso 1: entrar a la sala -->
+    <section class="j-vista j-ingreso" id="vIngreso" hidden>
+      <h1 class="titulo" id="titulo">¡Trivia del Cumple!</h1>
+      <form class="j-form" id="formIngreso" autocomplete="off" novalidate>
+        <label class="j-campo">
+          <span>Código de sala</span>
+          <input id="inputCodigo" name="codigo" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="1234" required>
+        </label>
+        <label class="j-campo">
+          <span>Tu nombre</span>
+          <input id="inputNombre" name="nombre" maxlength="16" placeholder="¿Cómo te llamás?" autocapitalize="words" required>
+        </label>
+        <button class="j-boton" id="botonEntrar" type="submit">¡Entrar!</button>
+        <p class="j-error" id="errorIngreso" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <!-- Esperando que empiece (o la próxima pregunta) -->
+    <section class="j-vista j-centro" id="vEspera" hidden>
+      <p class="j-emoji" aria-hidden="true">🎉</p>
+      <h2 class="j-titulo" id="esperaTitulo">¡Estás adentro!</h2>
+      <p class="j-texto" id="esperaTexto">Mirá la tele: el juego empieza en un ratito.</p>
+    </section>
+
+    <!-- Paso 2: los 4 botones (sin texto: las respuestas se leen en la tele) -->
+    <section class="j-vista j-pregunta" id="vPregunta" hidden>
+      <div class="j-pregunta-barra">
+        <span id="jNumero">Pregunta 1 de 10</span>
+        <span class="j-tiempo" id="jTiempo">20</span>
+      </div>
+      <div class="j-botones" id="jBotones"></div>
+      <p class="j-pista">Mirá las respuestas en la tele 📺</p>
+    </section>
+
+    <!-- Respuesta enviada -->
+    <section class="j-vista j-centro" id="vEnviada" hidden>
+      <div class="j-elegida" id="jElegida"></div>
+      <h2 class="j-titulo">¡Respuesta enviada!</h2>
+      <p class="j-texto">Esperando a los demás…</p>
+    </section>
+
+    <!-- Paso 3: cómo te fue -->
+    <section class="j-vista j-centro j-resultado" id="vResultado" hidden>
+      <p class="j-icono-resultado" id="resIcono" aria-hidden="true">✔</p>
+      <h2 class="j-titulo" id="resTitulo">¡Correcto!</h2>
+      <p class="j-suma" id="resSuma">+850</p>
+      <p class="j-racha" id="resRacha" hidden></p>
+      <p class="j-puesto" id="resPuesto">Vas 2° de 9</p>
+    </section>
+
+    <!-- Final -->
+    <section class="j-vista j-centro" id="vPodio" hidden>
+      <p class="j-emoji" id="podioMedalla" aria-hidden="true">🏆</p>
+      <h2 class="j-titulo" id="podioTitulo">¡Terminaste 1°!</h2>
+      <p class="j-suma" id="podioPuntos"></p>
+      <p class="j-texto">Mirá el podio en la tele.</p>
+    </section>
+
+    <!-- Mensajes (sala inexistente, falta configurar, etc.) -->
+    <section class="j-vista j-centro" id="vMensaje" hidden>
+      <p class="j-emoji" id="mensajeEmoji" aria-hidden="true">😕</p>
+      <h2 class="j-titulo" id="mensajeTitulo"></h2>
+      <p class="j-texto" id="mensajeTexto"></p>
+      <button class="j-boton" id="mensajeBoton" type="button">Volver</button>
+    </section>
+  </main>
+
+  <footer class="j-pie">
+    <button class="j-salir" id="botonSalir" type="button" hidden>Salir de la partida</button>
+  </footer>
+
+  <p class="j-aviso" id="jAviso" hidden></p>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="comun.js?v=2"></script>
+  <script src="player.js?v=2"></script>
+</body>
+</html>

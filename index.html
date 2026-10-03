@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trivia del Cumple</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body class="tv">
+  <!-- SALA DE ESPERA: código, QR y jugadores conectados -->
+  <section class="pantalla lobby" id="pantallaLobby">
+    <div class="lobby-info">
+      <h1 class="titulo" id="titulo">¡Trivia del Cumple!</h1>
+      <ol class="pasos">
+        <li><span>1</span>Escaneá el código con el celu</li>
+        <li><span>2</span>Poné tu nombre</li>
+        <li><span>3</span>Mirá la tele y respondé rápido</li>
+      </ol>
+      <div class="sala">
+        <span class="sala-etiqueta">Código de sala</span>
+        <strong class="sala-codigo" id="codigoSala">····</strong>
+      </div>
+      <p class="conexion" id="conexion" data-estado="conectando">
+        <span class="conexion-punto"></span><span id="conexionTexto">Conectando…</span>
+      </p>
+      <p class="aviso-local" id="avisoLocal" hidden>Versión local: el QR lleva a los celulares a la página publicada.</p>
+      <a class="solo-celular" href="player.html">📱 ¿Sos jugador? Tocá acá para entrar</a>
+    </div>
+    <div class="lobby-qr">
+      <canvas class="qr" id="qr" aria-label="Código QR para entrar a la sala"></canvas>
+    </div>
+    <div class="lobby-jugadores">
+      <h2 class="lobby-cantidad"><span id="cantidadJugadores">0</span> <span id="palabraJugadores">jugadores</span></h2>
+      <ul class="chips" id="listaJugadores"></ul>
+      <p class="lobby-vacio" id="lobbyVacio">Esperando a que entren…</p>
+    </div>
+    <p class="pista-ok" id="pistaLobby">Cuando estén todos, apretá <kbd>OK</kbd> para empezar</p>
+  </section>
+
+  <!-- PREGUNTA: texto grande, cuenta regresiva y las 4 opciones -->
+  <section class="pantalla pregunta" id="pantallaPregunta" hidden>
+    <header class="barra">
+      <span class="barra-numero" id="preguntaNumero">Pregunta 1 de 10</span>
+      <div class="reloj" id="reloj">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="reloj-fondo" cx="50" cy="50" r="44"/>
+          <circle class="reloj-arco" id="relojArco" cx="50" cy="50" r="44"/>
+        </svg>
+        <span class="reloj-numero" id="relojNumero">20</span>
+      </div>
+      <span class="barra-respondieron"><strong id="respondieron">0</strong> de <span id="habilitados">0</span> respondieron</span>
+    </header>
+    <h2 class="pregunta-texto" id="preguntaTexto"></h2>
+    <div class="opciones" id="opciones"></div>
+    <aside class="tarde">
+      <canvas class="qr-chico" id="qrChico" aria-hidden="true"></canvas>
+      <span>¿Llegaste tarde?<br>Sala <strong id="codigoChico">····</strong></span>
+    </aside>
+  </section>
+
+  <!-- RESULTADOS: respuesta correcta, gráfico y Top 5 -->
+  <section class="pantalla resultados" id="pantallaResultados" hidden>
+    <div class="resultados-izq">
+      <span class="barra-numero" id="resNumero">Pregunta 1 de 10</span>
+      <h2 class="resultados-pregunta" id="resPregunta"></h2>
+      <p class="resultados-correcta" id="resCorrecta"></p>
+      <div class="grafico" id="grafico"></div>
+    </div>
+    <div class="resultados-der">
+      <h3 class="tabla-titulo">Top 5</h3>
+      <ol class="tabla" id="tabla"></ol>
+    </div>
+    <p class="pista-ok" id="pistaResultados">Apretá <kbd>OK</kbd> para la siguiente pregunta</p>
+  </section>
+
+  <!-- PODIO FINAL -->
+  <section class="pantalla podio" id="pantallaPodio" hidden>
+    <h2 class="titulo podio-titulo">¡Ganadores!</h2>
+    <div class="podio-escalones" id="podioEscalones"></div>
+    <ol class="podio-resto" id="podioResto"></ol>
+    <p class="pista-ok">Apretá <kbd>OK</kbd> para jugar otra partida</p>
+  </section>
+
+  <!-- Falta configurar Firebase -->
+  <section class="pantalla configurar" id="pantallaConfigurar" hidden>
+    <h1 class="titulo">Falta un paso</h1>
+    <p>Para jugar hay que conectar el juego con Firebase.</p>
+    <p>Seguí la guía <strong>guia_firebase.md</strong> y pegá tu configuración en <strong>config.js</strong>.</p>
+  </section>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+  <p class="aviso aviso-sonido" id="avisoSonido">🔈 Apretá OK o hacé clic para activar el sonido</p>
+  <p class="aviso aviso-mudo" id="mudo" hidden>🔇 Sonido apagado (M)</p>
+  <p class="atajos">OK siguiente · N nueva partida · F pantalla completa · M sonido</p>
+  <canvas class="confeti" id="confeti" aria-hidden="true"></canvas>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="preguntas.js?v=2"></script>
+  <script src="comun.js?v=2"></script>
+  <script src="app.js?v=2"></script>
+</body>
+</html>
