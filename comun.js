@@ -75,6 +75,18 @@ function esLocal() {
 }
 
 /* ---------------------------------------------------------
+   Puntos finales (escala de la ruleta)
+   --------------------------------------------------------- */
+
+/** Convierte los puntos de la trivia a la escala chica: 1.800 → 2. */
+function puntosFinales(puntosTrivia) {
+  return Math.round((puntosTrivia || 0) / PUNTOS_TRIVIA_POR_PUNTO);
+}
+
+const textoPuntos = (n) => `${n} ${n === 1 ? 'punto' : 'puntos'}`;
+const formatoMiles = (n) => (n || 0).toLocaleString('es-AR');
+
+/* ---------------------------------------------------------
    Formas y colores de las 4 respuestas (como en la TV)
    --------------------------------------------------------- */
 

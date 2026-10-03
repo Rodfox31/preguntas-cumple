@@ -15,8 +15,8 @@ Juego de preguntas estilo Kahoot para proyectar en la tele, con hasta 20 celular
 
 1. En la tele, abrí **`rodfox31.github.io/preguntas-cumple`** y apretá **OK** una vez: eso activa el sonido.
 2. Los invitados escanean el QR (o entran a la página del juego y escriben el código de 4 números).
-3. Con **OK** empieza la partida. Cada pregunta termina cuando se acaba el tiempo o cuando respondieron todos.
-4. En los resultados, **OK** pasa a la siguiente pregunta. Después de la última va al podio, y desde ahí **OK** arranca otra partida.
+3. Con **OK** empieza la partida: se eligen al azar **20 de las 40 preguntas** (si juegan otra, se prefieren las que no salieron). Cada pregunta termina cuando se acaba el tiempo o cuando respondieron todos.
+4. En los resultados, **OK** pasa a la siguiente pregunta. Después de la última: **OK** → podio → **OK** → tabla final con todos → **OK** → partida nueva.
 
 ### Teclas en la TV
 
@@ -30,6 +30,8 @@ Juego de preguntas estilo Kahoot para proyectar en la tele, con hasta 20 celular
 ## Puntaje
 
 Estilo Kahoot: una respuesta correcta da entre **1000 puntos** (al instante) y **500** (en el último segundo); una incorrecta, 0. La hora de cada respuesta la pone el servidor de Firebase, así que no influye el reloj de cada celular.
+
+**Puntos finales:** en el podio, la tabla final y los celulares, los puntos se pasan a la escala de la ruleta: se dividen por 1.000 y se redondean (1.800 → **2**). Con 20 preguntas el máximo es 20. El divisor se cambia en `config.js` (`PUNTOS_TRIVIA_POR_PUNTO`; con 2000 el máximo queda en 10).
 
 ## Detalles
 

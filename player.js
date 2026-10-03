@@ -40,6 +40,7 @@ const el = {
   podioMedalla: $('#podioMedalla'),
   podioTitulo: $('#podioTitulo'),
   podioPuntos: $('#podioPuntos'),
+  podioDetalle: $('#podioDetalle'),
   mensajeEmoji: $('#mensajeEmoji'),
   mensajeTitulo: $('#mensajeTitulo'),
   mensajeTexto: $('#mensajeTexto'),
@@ -367,7 +368,7 @@ function render() {
     }
   } else if (estado.fase === 'resultados') {
     mostrarResultado(yo);
-  } else if (estado.fase === 'podio') {
+  } else if (estado.fase === 'podio' || estado.fase === 'tabla') {
     mostrarFinal(yo);
   } else {
     esperar('¡Estás adentro!', 'Mirá la tele: el juego empieza en un ratito.');
@@ -506,7 +507,9 @@ function mostrarFinal(yo) {
   const medallas = ['🥇', '🥈', '🥉'];
   el.podioMedalla.textContent = medallas[puesto - 1] || '🎉';
   el.podioTitulo.textContent = puesto === 1 ? '¡Ganaste!' : `¡Terminaste ${puesto}° de ${total}!`;
-  el.podioPuntos.textContent = `${(yo.puntos || 0).toLocaleString('es-AR')} puntos`;
+  // Puntos en la escala de la ruleta (1.800 → 2), con los de la trivia como referencia
+  el.podioPuntos.textContent = textoPuntos(puntosFinales(yo.puntos));
+  el.podioDetalle.textContent = `${formatoMiles(yo.puntos)} en la trivia · Mirá la tabla en la tele.`;
   if (vistaActual !== 'vPodio') mostrarVista('vPodio');
   const clave = `${estado.partida}-podio`;
   if (festejado !== clave) {

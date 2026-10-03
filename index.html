@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body class="tv">
   <!-- SALA DE ESPERA: código, QR y jugadores conectados -->
@@ -80,7 +80,16 @@
   <section class="pantalla podio" id="pantallaPodio" hidden>
     <h2 class="titulo podio-titulo">¡Ganadores!</h2>
     <div class="podio-escalones" id="podioEscalones"></div>
-    <ol class="podio-resto" id="podioResto"></ol>
+    <p class="pista-ok">Apretá <kbd>OK</kbd> para ver la tabla final</p>
+  </section>
+
+  <!-- TABLA FINAL: todos los jugadores, con los puntos en la escala de la ruleta -->
+  <section class="pantalla tabla-final" id="pantallaTabla" hidden>
+    <header class="tabla-final-cabecera">
+      <h2 class="titulo tabla-final-titulo">Tabla final</h2>
+      <p class="tabla-final-nota" id="tablaNota">Cada 1.000 puntos de la trivia = 1 punto</p>
+    </header>
+    <ol class="tabla-final-lista" id="tablaFinal"></ol>
     <p class="pista-ok">Apretá <kbd>OK</kbd> para jugar otra partida</p>
   </section>
 
@@ -100,9 +109,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-  <script src="config.js?v=3"></script>
-  <script src="preguntas.js?v=3"></script>
-  <script src="comun.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="config.js?v=5"></script>
+  <script src="preguntas.js?v=5"></script>
+  <script src="comun.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

@@ -467,7 +467,8 @@ body.tv {
 .escalon--3 { animation-delay: 0.1s; }
 .escalon-medalla { font-size: 9vh; line-height: 1.1; }
 .escalon-nombre { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 4.6vh; font-weight: 700; }
-.escalon-puntos { margin-bottom: 1.2vh; font-size: 3vh; font-weight: 600; opacity: 0.9; }
+.escalon-puntos { font-family: var(--fuente-titulo); font-size: 4.4vh; color: var(--dorado); }
+.escalon-trivia { margin-bottom: 1.2vh; font-size: 2.2vh; font-weight: 600; opacity: 0.75; }
 .escalon-base {
   width: 100%;
   display: grid;
@@ -480,29 +481,79 @@ body.tv {
   text-shadow: 0 0.04em 0 rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 1.2vh 0 rgba(255, 255, 255, 0.25);
 }
-.escalon--1 .escalon-base { height: 34vh; background: linear-gradient(#ffd75e, #e0a100); }
-.escalon--2 .escalon-base { height: 24vh; background: linear-gradient(#e9eef5, #a9b4c4); color: rgba(60, 70, 90, 0.8); }
-.escalon--3 .escalon-base { height: 16vh; background: linear-gradient(#f0a868, #b8662b); }
+.escalon--1 .escalon-base { height: 29vh; background: linear-gradient(#ffd75e, #e0a100); }
+.escalon--2 .escalon-base { height: 20vh; background: linear-gradient(#e9eef5, #a9b4c4); color: rgba(60, 70, 90, 0.8); }
+.escalon--3 .escalon-base { height: 13vh; background: linear-gradient(#f0a868, #b8662b); }
 .escalon--1 .escalon-nombre { font-size: 5.6vh; color: var(--dorado); }
 
-.podio-resto {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 2vh 0 3vh;
+/* ---------- Tabla final ---------- */
+
+.tabla-final { display: flex; flex-direction: column; align-items: center; }
+.tabla-final-cabecera { text-align: center; margin-bottom: 2vh; }
+.tabla-final-titulo { font-size: 7vh; transform: rotate(-2deg); }
+.tabla-final-nota { margin: 1vh 0 0; font-size: 2.4vh; font-weight: 600; opacity: 0.8; }
+
+.tabla-final-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 60vw);
+  grid-row-gap: 0.8vh;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
-.podio-resto li {
-  margin: 0.6vh 0.8vw;
-  padding: 0.8vh 1.4vw;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.3);
-  font-size: 2.6vh;
-  font-weight: 600;
+.tabla-final-lista.dos-columnas {
+  grid-template-columns: minmax(0, 44vw) minmax(0, 44vw);
+  grid-template-rows: repeat(10, auto);
+  grid-auto-flow: column;
+  grid-column-gap: 2vw;
 }
-.resto-puesto { color: var(--dorado); margin-right: 0.6vw; }
-.resto-puntos { margin-left: 0.8vw; opacity: 0.8; }
+
+.final-fila {
+  display: flex;
+  align-items: center;
+  padding: 0.5vh 0.8vw 0.5vh 0.5vh;
+  border-radius: 1.6vh;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 3vh;
+  font-weight: 700;
+  animation: aparecer 0.5s ease-out both;
+}
+.final-fila--1 { background: rgba(255, 200, 61, 0.25); box-shadow: inset 0 0 0 0.35vh var(--dorado); }
+.final-fila--2 { background: rgba(220, 228, 240, 0.18); }
+.final-fila--3 { background: rgba(240, 168, 104, 0.2); }
+.final-puesto {
+  width: 4.8vh;
+  height: 4.8vh;
+  display: grid;
+  place-items: center;
+  flex: none;
+  margin-right: 1vw;
+  padding-top: 0.1em;
+  border-radius: 50%;
+  background: var(--color, var(--violeta));
+  font-family: var(--fuente-titulo);
+  font-weight: 400;
+  font-size: 2.8vh;
+}
+.final-fila--1 .final-puesto, .final-fila--2 .final-puesto, .final-fila--3 .final-puesto {
+  background: none;
+  padding-top: 0;
+  font-family: var(--fuente-texto);
+  font-size: 4.4vh;
+}
+.final-nombre { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.final-trivia { margin: 0 1.2vw; font-size: 2.2vh; font-weight: 600; opacity: 0.65; }
+.final-puntos {
+  min-width: 6.4vh;
+  padding: 0.5vh 1vw 0.2vh;
+  border-radius: 999px;
+  background: var(--dorado);
+  color: var(--texto-oscuro);
+  font-family: var(--fuente-titulo);
+  font-weight: 400;
+  font-size: 3.6vh;
+  text-align: center;
+}
 
 /* ---------- Configuración pendiente, avisos y confeti ---------- */
 
@@ -571,7 +622,8 @@ body.tv {
 /* Smart TV (lo activa app.js): sin efectos caros */
 .liviano .opcion,
 .liviano .tabla-fila,
-.liviano .escalon { animation: none; }
+.liviano .escalon,
+.liviano .final-fila { animation: none; }
 
 /* TV en pantalla vertical o angosta (por ejemplo, si alguien la abre en el celu) */
 @media (max-aspect-ratio: 1/1) {

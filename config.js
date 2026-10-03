@@ -9,6 +9,17 @@ const TITULO = '¡Trivia del Cumple!';
 // Máximo de jugadores por sala.
 const MAX_JUGADORES = 20;
 
+// ✏️ Preguntas por partida: se eligen al azar entre todas las de preguntas.js.
+const PREGUNTAS_POR_PARTIDA = 20;
+
+/*
+  ✏️ Puntos finales (podio, tabla final y celulares): los puntos de la trivia
+  se dividen por este número y se redondean, para que queden en la misma
+  escala que la ruleta. Con 1000: 1.800 → 2, 3.400 → 3, 500 → 1.
+  Con 20 preguntas el máximo es 20; si querés que el máximo sea 10, poné 2000.
+*/
+const PUNTOS_TRIVIA_POR_PUNTO = 1000;
+
 /*
   ✏️ PEGÁ ACÁ LA CONFIGURACIÓN DE TU PROYECTO DE FIREBASE
   (ver guia_firebase.md, paso 4). Firebase te da un bloque igual a este:

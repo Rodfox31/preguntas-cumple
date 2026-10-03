@@ -38,6 +38,7 @@ const el = {
     pregunta: $('#pantallaPregunta'),
     resultados: $('#pantallaResultados'),
     podio: $('#pantallaPodio'),
+    tabla: $('#pantallaTabla'),
     configurar: $('#pantallaConfigurar'),
   },
   codigoSala: $('#codigoSala'),
@@ -66,7 +67,8 @@ const el = {
   tabla: $('#tabla'),
   pistaResultados: $('#pistaResultados'),
   podioEscalones: $('#podioEscalones'),
-  podioResto: $('#podioResto'),
+  tablaFinal: $('#tablaFinal'),
+  tablaNota: $('#tablaNota'),
   toast: $('#toast'),
   avisoSonido: $('#avisoSonido'),
   mudo: $('#mudo'),
@@ -101,7 +103,9 @@ let timerToast = null;
    Utilidades
    --------------------------------------------------------- */
 
-const preguntaActual = () => PREGUNTAS[estado.indice];
+/** La partida usa un subconjunto de PREGUNTAS, en el orden guardado en estado.orden. */
+const preguntaActual = () => PREGUNTAS[Array.isArray(estado.orden) ? estado.orden[estado.indice] : estado.indice];
+const totalPreguntas = () => (Array.isArray(estado.orden) ? estado.orden.length : PREGUNTAS.length);
 const claveRespuestas = () => `${estado.partida}-${estado.indice}`;
 
 function listaJugadores() {
@@ -206,7 +210,7 @@ async function iniciar() {
       await sala.set({
         creado: MARCA_SERVIDOR(),
         host: { id: hostId, conectado: true },
-        estado: { fase: 'lobby', indice: -1, total: PREGUNTAS.length, partida: idAleatorio(6) },
+        estado: { fase: 'lobby', indice: -1, partida: idAleatorio(6) },
       });
     }
 
@@ -253,14 +257,16 @@ function marcarHostConectado() {
 /** Si la TV se recargó en medio de la partida, sigue desde donde estaba. */
 function reanudar(est) {
   estado = est;
-  if (est.fase === 'pregunta' && PREGUNTAS[est.indice]) {
+  if (est.fase === 'pregunta' && preguntaActual()) {
     escucharRespuestas();
     mostrarPregunta();
     arrancarReloj();
-  } else if (est.fase === 'resultados' && PREGUNTAS[est.indice]) {
+  } else if (est.fase === 'resultados' && preguntaActual()) {
     mostrarResultados();
   } else if (est.fase === 'podio') {
     mostrarPodio(false);
+  } else if (est.fase === 'tabla') {
+    mostrarTabla();
   } else {
     estado.fase = 'lobby';
     mostrarLobby();
@@ -385,18 +391,45 @@ async function empezarPartida() {
     toast('Todavía no entró nadie: escaneen el QR 📱');
     return;
   }
+  estado = Object.assign({}, estado, { orden: elegirPreguntas() });
   await irAPregunta(0);
 }
 
+const CLAVE_USADAS = 'trivia.usadas';
+
+/**
+ * Elige al azar PREGUNTAS_POR_PARTIDA preguntas (devuelve sus posiciones en PREGUNTAS).
+ * Prefiere las que no salieron en la partida anterior, así dos partidas seguidas no se repiten.
+ */
+function elegirPreguntas() {
+  let usadas = [];
+  try { usadas = JSON.parse(localStorage.getItem(CLAVE_USADAS)) || []; } catch (e) { usadas = []; }
+  const mezclar = (lista) => {
+    for (let i = lista.length - 1; i > 0; i--) {
+      const j = Math.floor(aleatorio() * (i + 1));
+      [lista[i], lista[j]] = [lista[j], lista[i]];
+    }
+    return lista;
+  };
+  const posiciones = PREGUNTAS.map((_, i) => i);
+  const nuevas = mezclar(posiciones.filter((i) => usadas.indexOf(PREGUNTAS[i].id) === -1));
+  const repetidas = mezclar(posiciones.filter((i) => usadas.indexOf(PREGUNTAS[i].id) !== -1));
+  const cantidad = Math.min(PREGUNTAS_POR_PARTIDA, PREGUNTAS.length);
+  const elegidas = mezclar(nuevas.concat(repetidas).slice(0, cantidad));
+  try { localStorage.setItem(CLAVE_USADAS, JSON.stringify(elegidas.map((i) => PREGUNTAS[i].id))); } catch (e) { /* sin almacenamiento */ }
+  return elegidas;
+}
+
 async function irAPregunta(indice) {
-  const p = PREGUNTAS[indice];
+  const p = PREGUNTAS[estado.orden[indice]];
   // Que no queden las respuestas de la pregunta anterior: si no, parecería que ya respondieron todos
   dejarDeEscucharRespuestas();
   respuestas = {};
   const nuevo = {
     fase: 'pregunta',
     indice,
-    total: PREGUNTAS.length,
+    total: estado.orden.length,
+    orden: estado.orden,
     partida: estado.partida,
     duracion: p.tiempo,
     opciones: p.opciones.length,
@@ -420,7 +453,7 @@ async function irAPregunta(indice) {
 function mostrarPregunta() {
   const p = preguntaActual();
   mostrarPantalla('pregunta');
-  el.preguntaNumero.textContent = `Pregunta ${estado.indice + 1} de ${PREGUNTAS.length}`;
+  el.preguntaNumero.textContent = `Pregunta ${estado.indice + 1} de ${totalPreguntas()}`;
   el.preguntaTexto.textContent = p.pregunta;
   el.preguntaTexto.classList.toggle('larga', p.pregunta.length > 70);
 
@@ -556,9 +589,9 @@ async function aplicarPuntos() {
 
 function mostrarResultados() {
   const p = preguntaActual();
-  const ultima = estado.indice + 1 >= PREGUNTAS.length;
+  const ultima = estado.indice + 1 >= totalPreguntas();
   mostrarPantalla('resultados');
-  el.resNumero.textContent = `Pregunta ${estado.indice + 1} de ${PREGUNTAS.length}`;
+  el.resNumero.textContent = `Pregunta ${estado.indice + 1} de ${totalPreguntas()}`;
   el.resPregunta.textContent = p.pregunta;
 
   el.resCorrecta.textContent = '';
@@ -663,30 +696,18 @@ function mostrarPodio(festejar) {
     const nombre = document.createElement('span');
     nombre.className = 'escalon-nombre';
     nombre.textContent = j.nombre;
+    // Puntos en la escala de la ruleta (grande) y los de la trivia (chico)
     const puntos = document.createElement('span');
     puntos.className = 'escalon-puntos';
-    puntos.textContent = `${(j.puntos || 0).toLocaleString('es-AR')} pts`;
+    puntos.textContent = textoPuntos(puntosFinales(j.puntos));
+    const trivia = document.createElement('span');
+    trivia.className = 'escalon-trivia';
+    trivia.textContent = `${formatoMiles(j.puntos)} en la trivia`;
     const base = document.createElement('div');
     base.className = 'escalon-base';
     base.textContent = puesto + 1;
-    escalon.append(medalla, nombre, puntos, base);
+    escalon.append(medalla, nombre, puntos, trivia, base);
     el.podioEscalones.appendChild(escalon);
-  });
-
-  el.podioResto.textContent = '';
-  lista.slice(3, 10).forEach((j, i) => {
-    const fila = document.createElement('li');
-    const puesto = document.createElement('span');
-    puesto.className = 'resto-puesto';
-    puesto.textContent = `${i + 4}°`;
-    const nombre = document.createElement('span');
-    nombre.className = 'resto-nombre';
-    nombre.textContent = j.nombre;
-    const puntos = document.createElement('span');
-    puntos.className = 'resto-puntos';
-    puntos.textContent = (j.puntos || 0).toLocaleString('es-AR');
-    fila.append(puesto, nombre, puntos);
-    el.podioResto.appendChild(fila);
   });
 
   if (festejar) {
@@ -696,11 +717,52 @@ function mostrarPodio(festejar) {
   }
 }
 
+async function irALaTabla() {
+  await sala.child('estado/fase').set('tabla');
+  estado = Object.assign({}, estado, { fase: 'tabla' });
+  mostrarTabla();
+  sonido.tocar('revelar');
+}
+
+/** Tabla final con todos los jugadores y sus puntos en la escala de la ruleta. */
+function mostrarTabla() {
+  mostrarPantalla('tabla');
+  el.tablaNota.textContent = `Cada ${formatoMiles(PUNTOS_TRIVIA_POR_PUNTO)} puntos de la trivia = 1 punto`;
+  const lista = ranking();
+  const medallas = ['🥇', '🥈', '🥉'];
+  el.tablaFinal.classList.toggle('dos-columnas', lista.length > 10);
+
+  const fragmento = document.createDocumentFragment();
+  lista.forEach((j, i) => {
+    const fila = document.createElement('li');
+    fila.className = i < 3 ? `final-fila final-fila--${i + 1}` : 'final-fila';
+    fila.style.setProperty('--color', colorDe(j.id));
+    fila.style.animationDelay = `${Math.min(i, 19) * 0.06}s`;
+
+    const puesto = document.createElement('span');
+    puesto.className = 'final-puesto';
+    puesto.textContent = medallas[i] || `${i + 1}°`;
+    const nombre = document.createElement('span');
+    nombre.className = 'final-nombre';
+    nombre.textContent = j.nombre;
+    const trivia = document.createElement('span');
+    trivia.className = 'final-trivia';
+    trivia.textContent = formatoMiles(j.puntos);
+    const puntos = document.createElement('span');
+    puntos.className = 'final-puntos';
+    puntos.textContent = puntosFinales(j.puntos);
+    fila.append(puesto, nombre, trivia, puntos);
+    fragmento.appendChild(fila);
+  });
+  el.tablaFinal.textContent = '';
+  el.tablaFinal.appendChild(fragmento);
+}
+
 /** Puntos a cero, borra las respuestas y vuelve a la sala de espera (los conectados siguen adentro). */
 async function nuevaPartida() {
   const cambios = {
     respuestas: null,
-    estado: { fase: 'lobby', indice: -1, total: PREGUNTAS.length, partida: idAleatorio(6) },
+    estado: { fase: 'lobby', indice: -1, partida: idAleatorio(6) },
   };
   Object.keys(jugadores).forEach((id) => {
     const j = jugadores[id];
@@ -728,9 +790,10 @@ function avanzar() {
   accion(async () => {
     if (estado.fase === 'lobby') await empezarPartida();
     else if (estado.fase === 'resultados') {
-      if (estado.indice + 1 < PREGUNTAS.length) await irAPregunta(estado.indice + 1);
+      if (estado.indice + 1 < totalPreguntas()) await irAPregunta(estado.indice + 1);
       else await irAlPodio();
-    } else if (estado.fase === 'podio') await nuevaPartida();
+    } else if (estado.fase === 'podio') await irALaTabla();
+    else if (estado.fase === 'tabla') await nuevaPartida();
     // Durante una pregunta no se hace nada: se espera el reloj o que respondan todos
   });
 }
