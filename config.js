@@ -17,13 +17,13 @@ const MAX_JUGADORES = 20;
   los datos son las reglas de seguridad (database.rules.json).
 */
 const firebaseConfig = {
-  apiKey: 'PEGAR_AQUI',
-  authDomain: 'PEGAR_AQUI.firebaseapp.com',
-  databaseURL: 'https://PEGAR_AQUI-default-rtdb.firebaseio.com',
-  projectId: 'PEGAR_AQUI',
-  storageBucket: 'PEGAR_AQUI.appspot.com',
-  messagingSenderId: 'PEGAR_AQUI',
-  appId: 'PEGAR_AQUI',
+  apiKey: 'AIzaSyDkkKBUIJxPnQtRXj8Xtz-cwLia4XhBVbM',
+  authDomain: 'trivia-cumple-d0aa9.firebaseapp.com',
+  databaseURL: 'https://trivia-cumple-d0aa9-default-rtdb.firebaseio.com',
+  projectId: 'trivia-cumple-d0aa9',
+  storageBucket: 'trivia-cumple-d0aa9.firebasestorage.app',
+  messagingSenderId: '675926581432',
+  appId: '1:675926581432:web:f3eeaddc3d0d4920edd44d',
 };
 
 // Dirección publicada. Si la TV se abre en local (localhost o el archivo),
