@@ -15,7 +15,7 @@ Juego de preguntas estilo Kahoot para proyectar en la tele, con hasta 20 celular
 
 1. En la tele, abrí **`rodfox31.github.io/preguntas-cumple`** y apretá **OK** una vez: eso activa el sonido.
 2. Los invitados escanean el QR (o entran a la página del juego y escriben el código de 4 números).
-3. Con **OK** empieza la partida: se eligen al azar **20 de las 40 preguntas** (si juegan otra, se prefieren las que no salieron). Cada pregunta termina cuando se acaba el tiempo o cuando respondieron todos.
+3. Con **OK** empieza la partida: se eligen al azar **20 de las 80 preguntas** (40 de cultura general y 40 de cine y series), sin repetir entre partidas hasta que salieron todas. Cada pregunta termina cuando se acaba el tiempo o cuando respondieron todos.
 4. En los resultados, **OK** pasa a la siguiente pregunta. Después de la última: **OK** → podio → **OK** → tabla final con todos → **OK** → partida nueva.
 
 ### Teclas en la TV

@@ -399,7 +399,8 @@ const CLAVE_USADAS = 'trivia.usadas';
 
 /**
  * Elige al azar PREGUNTAS_POR_PARTIDA preguntas (devuelve sus posiciones en PREGUNTAS).
- * Prefiere las que no salieron en la partida anterior, así dos partidas seguidas no se repiten.
+ * Recuerda todas las que ya salieron (en esta TV) y no las repite hasta usar todas;
+ * cuando no alcanzan las nuevas, completa con otras y empieza a contar de nuevo.
  */
 function elegirPreguntas() {
   let usadas = [];
@@ -416,7 +417,10 @@ function elegirPreguntas() {
   const repetidas = mezclar(posiciones.filter((i) => usadas.indexOf(PREGUNTAS[i].id) !== -1));
   const cantidad = Math.min(PREGUNTAS_POR_PARTIDA, PREGUNTAS.length);
   const elegidas = mezclar(nuevas.concat(repetidas).slice(0, cantidad));
-  try { localStorage.setItem(CLAVE_USADAS, JSON.stringify(elegidas.map((i) => PREGUNTAS[i].id))); } catch (e) { /* sin almacenamiento */ }
+  const idsElegidos = elegidas.map((i) => PREGUNTAS[i].id);
+  // Si alcanzaron las nuevas se suman a las usadas; si no, se arranca otra vuelta con estas
+  const proximas = nuevas.length >= cantidad ? usadas.concat(idsElegidos) : idsElegidos;
+  try { localStorage.setItem(CLAVE_USADAS, JSON.stringify(proximas)); } catch (e) { /* sin almacenamiento */ }
   return elegidas;
 }
 
