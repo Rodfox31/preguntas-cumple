@@ -1,12 +1,13 @@
 /* =========================================================
-   TRIVIA DEL CUMPLE — preguntas de cultura general, nivel intermedio
+   TRIVIA DEL CUMPLE — preguntas de cultura general
    (música, cine, deportes y cultura general, con subtítulos en japonés)
+   - id 1 a 20: nivel intermedio.
+   - id 21 a 40: dificultad extrema.
 
    ✏️ EDITÁ ACÁ LAS PREGUNTAS
    En cada partida se eligen al azar PREGUNTAS_POR_PARTIDA (config.js)
    de esta lista, y no se repiten entre partidas hasta que salieron todas.
-   Con 20 preguntas y 20 por partida, salen todas en cada partida, en
-   orden distinto.
+   Con 40 preguntas y 20 por partida: 2 partidas sin repetir.
 
    - id:         número único (sirve para no repetir preguntas entre partidas).
    - pregunta:   el texto que se ve en grande en la TV.
@@ -26,6 +27,10 @@
 'use strict';
 
 const PREGUNTAS = [
+  // =========================================================
+  // NIVEL INTERMEDIO
+  // =========================================================
+
   // ---------- Música ----------
   {
     id: 1,
@@ -212,5 +217,197 @@ const PREGUNTAS = [
     opcionesJa: ['ラファエロ', 'レオナルド・ダ・ヴィンチ', 'ミケランジェロ', 'ボッティチェリ'],
     correcta: 2,
     tiempo: 20,
+  },
+
+  // =========================================================
+  // DIFICULTAD EXTREMA
+  // =========================================================
+
+  // ---------- Música (extremo) ----------
+  {
+    id: 21,
+    pregunta: '¿Cuál era el nombre real de Freddie Mercury?',
+    preguntaJa: 'フレディ・マーキュリーの本名は？',
+    opciones: ['Frederick Bulsara', 'Farid Mercurian', 'Frederick Bailey', 'Farrokh Bulsara'],
+    opcionesJa: ['フレデリック・バルサラ', 'ファリド・マーキュリアン', 'フレデリック・ベイリー', 'ファルーク・バルサラ'],
+    correcta: 3,
+    tiempo: 25,
+  },
+  {
+    id: 22,
+    pregunta: 'En un piano estándar de 88 teclas, ¿cuántas teclas son negras?',
+    preguntaJa: '88鍵の標準的なピアノで、黒鍵はいくつ？',
+    opciones: ['36', '32', '40', '44'],
+    opcionesJa: ['36個', '32個', '40個', '44個'],
+    correcta: 0,
+    tiempo: 25,
+  },
+  {
+    id: 23,
+    pregunta: '¿Cuál es el álbum más vendido de la historia en todo el mundo?',
+    preguntaJa: '世界で最も売れたアルバムは？',
+    opciones: ['Back in Black', 'The Dark Side of the Moon', 'Thriller', 'Abbey Road'],
+    opcionesJa: ['バック・イン・ブラック', '狂気', 'スリラー', 'アビイ・ロード'],
+    correcta: 2,
+    tiempo: 25,
+  },
+  {
+    id: 24,
+    pregunta: '¿Qué tango compuso Carlos Gardel junto a Alfredo Le Pera?',
+    preguntaJa: 'カルロス・ガルデルがアルフレド・レ・ペラと作ったタンゴは？',
+    opciones: ['La cumparsita', 'Por una cabeza', 'Adiós Nonino', 'Caminito'],
+    opcionesJa: ['ラ・クンパルシータ', 'ポル・ウナ・カベサ', 'アディオス・ノニーノ', 'カミニート'],
+    correcta: 1,
+    tiempo: 25,
+  },
+  {
+    id: 25,
+    pregunta: 'Según la numeración tradicional, ¿cuántas sinfonías compuso Mozart?',
+    preguntaJa: '伝統的な番号付けで、モーツァルトの交響曲は第何番まである？',
+    opciones: ['27', '35', '52', '41'],
+    opcionesJa: ['第27番', '第35番', '第52番', '第41番'],
+    correcta: 3,
+    tiempo: 25,
+  },
+
+  // ---------- Cine (extremo) ----------
+  {
+    id: 26,
+    pregunta: '¿Cuál fue la primera película en ganar el Oscar a Mejor Película?',
+    preguntaJa: 'アカデミー作品賞を初めて受賞した映画は？',
+    opciones: ['Amanecer (Sunrise)', 'El cantor de jazz', 'Alas (Wings)', 'Lo que el viento se llevó'],
+    opcionesJa: ['サンライズ', 'ジャズ・シンガー', 'つばさ', '風と共に去りぬ'],
+    correcta: 2,
+    tiempo: 25,
+  },
+  {
+    id: 27,
+    pregunta: '¿Qué película ganó el primer Oscar a mejor película animada, en 2002?',
+    preguntaJa: '2002年、初めてのアカデミー長編アニメ映画賞を受賞したのは？',
+    opciones: ['Shrek', 'Monsters, Inc.', 'Jimmy Neutron', 'Lilo & Stitch'],
+    opcionesJa: ['シュレック', 'モンスターズ・インク', 'ジミー・ニュートロン', 'リロ・アンド・スティッチ'],
+    correcta: 0,
+    tiempo: 25,
+  },
+  {
+    id: 28,
+    pregunta: 'En "El ciudadano Kane", ¿qué palabra está escrita en el trineo?',
+    preguntaJa: '『市民ケーン』で、ソリに書かれている言葉は？',
+    opciones: ['Xanadu', 'Rosebud', 'Charlie', 'Snowflake'],
+    opcionesJa: ['ザナドゥ', 'ローズバッド', 'チャーリー', 'スノーフレーク'],
+    correcta: 1,
+    tiempo: 25,
+  },
+  {
+    id: 29,
+    pregunta: '¿Quién dirigió "El secreto de sus ojos", ganadora del Oscar?',
+    preguntaJa: 'アカデミー賞を受賞した『瞳の奥の秘密』の監督は？',
+    opciones: ['Damián Szifron', 'Lucrecia Martel', 'Fabián Bielinsky', 'Juan José Campanella'],
+    opcionesJa: ['ダミアン・ジフロン', 'ルクレシア・マルテル', 'ファビアン・ビエリンスキー', 'フアン・ホセ・カンパネラ'],
+    correcta: 3,
+    tiempo: 25,
+  },
+  {
+    id: 30,
+    pregunta: '¿Cuántas veces ganó Alfred Hitchcock el Oscar a mejor director?',
+    preguntaJa: 'アルフレッド・ヒッチコックがアカデミー監督賞を受賞した回数は？',
+    opciones: ['Ninguna', 'Una', 'Dos', 'Tres'],
+    opcionesJa: ['0回', '1回', '2回', '3回'],
+    correcta: 0,
+    tiempo: 25,
+  },
+
+  // ---------- Deportes (extremo) ----------
+  {
+    id: 31,
+    pregunta: '¿Qué país ganó la primera Copa América, en 1916?',
+    preguntaJa: '1916年の第1回コパ・アメリカで優勝した国は？',
+    opciones: ['Argentina', 'Brasil', 'Uruguay', 'Chile'],
+    opcionesJa: ['アルゼンチン', 'ブラジル', 'ウルグアイ', 'チリ'],
+    correcta: 2,
+    tiempo: 25,
+  },
+  {
+    id: 32,
+    pregunta: '¿A qué altura está el aro de básquet?',
+    preguntaJa: 'バスケットボールのリングの高さは？',
+    opciones: ['2,85 m', '3,05 m', '3,25 m', '3,50 m'],
+    opcionesJa: ['2.85m', '3.05m', '3.25m', '3.50m'],
+    correcta: 1,
+    tiempo: 25,
+  },
+  {
+    id: 33,
+    pregunta: '¿Quién fue el goleador del Mundial 1978?',
+    preguntaJa: '1978年W杯の得点王は？',
+    opciones: ['Daniel Passarella', 'Leopoldo Luque', 'Rob Rensenbrink', 'Mario Kempes'],
+    opcionesJa: ['ダニエル・パサレラ', 'レオポルド・ルーケ', 'ロブ・レンセンブリンク', 'マリオ・ケンペス'],
+    correcta: 3,
+    tiempo: 25,
+  },
+  {
+    id: 34,
+    pregunta: 'En el rugby, ¿cuántos puntos vale un try?',
+    preguntaJa: 'ラグビーユニオンで、トライは何点？',
+    opciones: ['3', '4', '5', '7'],
+    opcionesJa: ['3点', '4点', '5点', '7点'],
+    correcta: 2,
+    tiempo: 25,
+  },
+  {
+    id: 35,
+    pregunta: '¿En qué año se jugó el primer partido internacional de fútbol (Escocia vs. Inglaterra)?',
+    preguntaJa: 'サッカー初の国際試合（スコットランド対イングランド）が行われたのは何年？',
+    opciones: ['1872', '1863', '1888', '1901'],
+    opcionesJa: ['1872年', '1863年', '1888年', '1901年'],
+    correcta: 0,
+    tiempo: 25,
+  },
+
+  // ---------- Cultura general (extremo) ----------
+  {
+    id: 36,
+    pregunta: '¿Cuál es el hueso más pequeño del cuerpo humano?',
+    preguntaJa: '人体で一番小さい骨は？',
+    opciones: ['Martillo', 'Estribo', 'Yunque', 'Falange'],
+    opcionesJa: ['ツチ骨', 'アブミ骨', 'キヌタ骨', '指骨'],
+    correcta: 1,
+    tiempo: 25,
+  },
+  {
+    id: 37,
+    pregunta: '¿Cuál es la capital de Kazajistán?',
+    preguntaJa: 'カザフスタンの首都は？',
+    opciones: ['Almaty', 'Bishkek', 'Astaná', 'Taskent'],
+    opcionesJa: ['アルマトイ', 'ビシュケク', 'アスタナ', 'タシケント'],
+    correcta: 2,
+    tiempo: 25,
+  },
+  {
+    id: 38,
+    pregunta: '¿Qué elemento químico tiene el símbolo "W"?',
+    preguntaJa: '元素記号「W」の元素は？',
+    opciones: ['Vanadio', 'Itrio', 'Xenón', 'Wolframio'],
+    opcionesJa: ['バナジウム', 'イットリウム', 'キセノン', 'タングステン'],
+    correcta: 3,
+    tiempo: 25,
+  },
+  {
+    id: 39,
+    pregunta: '¿Cuántos países independientes hay en América del Sur?',
+    preguntaJa: '南アメリカの独立国はいくつ？',
+    opciones: ['12', '10', '13', '14'],
+    opcionesJa: ['12か国', '10か国', '13か国', '14か国'],
+    correcta: 0,
+    tiempo: 25,
+  },
+  {
+    id: 40,
+    pregunta: '¿En qué museo está "La noche estrellada" de Van Gogh?',
+    preguntaJa: 'ゴッホの『星月夜』を所蔵している美術館は？',
+    opciones: ['Museo del Louvre', 'MoMA (Nueva York)', 'Museo Van Gogh', "Museo d'Orsay"],
+    opcionesJa: ['ルーヴル美術館', 'ニューヨーク近代美術館', 'ゴッホ美術館', 'オルセー美術館'],
+    correcta: 1,
+    tiempo: 25,
   },
 ];
