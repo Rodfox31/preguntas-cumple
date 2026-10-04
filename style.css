@@ -22,6 +22,7 @@
 
   --fuente-titulo: 'Luckiest Guy', 'Arial Black', 'Segoe UI Black', system-ui, sans-serif;
   --fuente-texto: 'Fredoka', 'Segoe UI', system-ui, sans-serif;
+  --fuente-ja: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', 'Meiryo', 'Yu Gothic', 'Noto Sans JP', sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -245,6 +246,7 @@ body.tv {
 .pregunta-texto {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 2.5vh 6vw;
@@ -259,6 +261,16 @@ body.tv {
   box-shadow: 0 1vh 0 rgba(0, 0, 0, 0.25), 0 2vh 5vh rgba(0, 0, 0, 0.35);
 }
 .pregunta-texto.larga { font-size: 5vh; }
+
+/* Subtítulos en japonés (MOSTRAR_JAPONES en config.js) */
+.texto-es, .texto-ja { display: block; }
+.texto-ja { font-family: var(--fuente-ja); font-weight: 700; line-height: 1.25; line-break: strict; }
+.pregunta-texto .texto-ja { margin-top: 1.2vh; font-size: 0.66em; color: #6b4bb8; }
+.opcion-texto .texto-ja { margin-top: 0.5vh; font-size: 0.72em; opacity: 0.92; }
+.opciones.bilingue .opcion { font-size: 4vh; padding-top: 1.4vh; padding-bottom: 1.4vh; }
+.opciones.bilingue .opcion .forma { width: 8vh; height: 8vh; }
+.resultados-pregunta .texto-ja { margin-top: 0.6vh; font-size: 0.72em; opacity: 0.8; }
+.correcta-texto .texto-ja { margin-top: 0.3vh; font-size: 0.62em; color: #6b4bb8; }
 
 .opciones {
   display: grid;

@@ -450,21 +450,44 @@ async function irAPregunta(indice) {
    Pregunta en curso
    --------------------------------------------------------- */
 
+/**
+ * Pone en `destino` el texto en español y, debajo, el subtítulo en japonés
+ * (si está activado en config.js y la pregunta lo tiene).
+ */
+function textoConSubtitulo(destino, espanol, japones) {
+  destino.textContent = '';
+  const es = document.createElement('span');
+  es.className = 'texto-es';
+  es.textContent = espanol;
+  destino.appendChild(es);
+  if (MOSTRAR_JAPONES && japones) {
+    const ja = document.createElement('span');
+    ja.className = 'texto-ja';
+    ja.lang = 'ja';
+    ja.textContent = japones;
+    destino.appendChild(ja);
+  }
+}
+
+const tieneJapones = (p) => MOSTRAR_JAPONES && !!p.preguntaJa;
+const opcionJa = (p, i) => (MOSTRAR_JAPONES && Array.isArray(p.opcionesJa) ? p.opcionesJa[i] : '');
+
 function mostrarPregunta() {
   const p = preguntaActual();
   mostrarPantalla('pregunta');
   el.preguntaNumero.textContent = `Pregunta ${estado.indice + 1} de ${totalPreguntas()}`;
-  el.preguntaTexto.textContent = p.pregunta;
+  textoConSubtitulo(el.preguntaTexto, p.pregunta, tieneJapones(p) ? p.preguntaJa : '');
   el.preguntaTexto.classList.toggle('larga', p.pregunta.length > 70);
 
   el.opciones.textContent = '';
   el.opciones.dataset.cantidad = p.opciones.length;
+  el.opciones.classList.toggle('bilingue', tieneJapones(p));
   p.opciones.forEach((texto, i) => {
     const opcion = document.createElement('div');
     opcion.className = `opcion opcion--${FORMAS[i].clase}`;
     const etiqueta = document.createElement('span');
     etiqueta.className = 'opcion-texto';
-    etiqueta.textContent = texto;
+    textoConSubtitulo(etiqueta, texto, opcionJa(p, i));
     opcion.append(iconoForma(i), etiqueta);
     el.opciones.appendChild(opcion);
   });
@@ -592,13 +615,14 @@ function mostrarResultados() {
   const ultima = estado.indice + 1 >= totalPreguntas();
   mostrarPantalla('resultados');
   el.resNumero.textContent = `Pregunta ${estado.indice + 1} de ${totalPreguntas()}`;
-  el.resPregunta.textContent = p.pregunta;
+  textoConSubtitulo(el.resPregunta, p.pregunta, tieneJapones(p) ? p.preguntaJa : '');
 
   el.resCorrecta.textContent = '';
   const marca = iconoForma(p.correcta);
   marca.classList.add(`forma--${FORMAS[p.correcta].clase}`);
   const texto = document.createElement('span');
-  texto.textContent = p.opciones[p.correcta];
+  texto.className = 'correcta-texto';
+  textoConSubtitulo(texto, p.opciones[p.correcta], opcionJa(p, p.correcta));
   el.resCorrecta.append(marca, texto);
 
   // Gráfico de barras: cuántos eligieron cada opción

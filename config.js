@@ -9,6 +9,10 @@ const TITULO = '¡Trivia del Cumple!';
 // Máximo de jugadores por sala.
 const MAX_JUGADORES = 20;
 
+// ✏️ Subtítulos en japonés debajo de cada pregunta y respuesta (en la TV).
+//    Poné false para mostrar solo el español.
+const MOSTRAR_JAPONES = true;
+
 // ✏️ Preguntas por partida: se eligen al azar entre todas las de preguntas.js.
 const PREGUNTAS_POR_PARTIDA = 20;
 

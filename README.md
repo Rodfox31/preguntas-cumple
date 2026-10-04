@@ -8,7 +8,7 @@ Juego de preguntas estilo Kahoot para proyectar en la tele, con hasta 20 celular
 ## Antes de la fiesta
 
 1. Seguí **[guia_firebase.md](guia_firebase.md)** y pegá tu configuración en `config.js`.
-2. Cambiá las preguntas en `preguntas.js` (y el título en `config.js`, si querés).
+2. Cambiá las preguntas en `preguntas.js` (y el título en `config.js`, si querés). Cada pregunta tiene subtítulos en japonés (`preguntaJa` y `opcionesJa`) que se ven en la TV; se apagan con `MOSTRAR_JAPONES` en `config.js`.
 3. Subí los cambios. Si cambiaste el código (no solo las preguntas), subí el `?v=…` de `index.html` y `player.html` para que los navegadores no usen archivos viejos guardados.
 
 ## Cómo se juega
