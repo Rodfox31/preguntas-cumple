@@ -307,7 +307,7 @@ body.tv {
 .tarde {
   position: absolute;
   right: 3vw;
-  bottom: 6vh;
+  bottom: 8.5vh;
   width: 11vw;
   display: flex;
   flex-direction: column;
@@ -612,14 +612,70 @@ body.tv {
 }
 .aviso-sonido { animation: pulso 2s ease-in-out infinite; }
 
-.atajos {
+/* Esquina de abajo a la derecha: atajos y botón para reiniciar */
+.esquina {
   position: fixed;
   right: 2vw;
-  bottom: 1.6vh;
-  margin: 0;
-  font-size: 1.6vh;
-  opacity: 0.35;
+  bottom: 1.4vh;
+  z-index: 65;
+  display: flex;
+  align-items: center;
 }
+.atajos { margin: 0 1vw 0 0; font-size: 1.6vh; opacity: 0.35; }
+
+.boton-reiniciar {
+  padding: 0.9vh 1.4vw 0.8vh;
+  border: 0.25vh solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 2.2vh;
+  font-weight: 700;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.15s, background 0.2s;
+}
+.boton-reiniciar:hover,
+.boton-reiniciar:focus { opacity: 1; background: var(--rosa); transform: scale(1.06); outline: none; }
+
+/* Confirmación para reiniciar */
+.confirmar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 0, 30, 0.8);
+  animation: aparecer 0.25s ease-out;
+}
+.confirmar-caja {
+  width: 58vw;
+  padding: 5vh 4vw 4.5vh;
+  border-radius: 4vh;
+  background: #fff;
+  color: var(--texto-oscuro);
+  text-align: center;
+  box-shadow: 0 0 0 1vh rgba(255, 255, 255, 0.25), 0 4vh 8vh rgba(0, 0, 0, 0.6);
+  animation: pop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+.confirmar-titulo { margin: 0; font-family: var(--fuente-titulo); font-weight: 400; font-size: 6vh; color: var(--violeta); }
+.confirmar-texto { margin: 2vh 0 4.5vh; font-size: 3.2vh; font-weight: 600; line-height: 1.3; }
+.confirmar-botones { display: flex; justify-content: center; }
+.confirmar-botones button {
+  margin: 0 1.2vw;
+  padding: 1.6vh 3vw 1.3vh;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--fuente-titulo);
+  font-size: 4vh;
+  transition: transform 0.15s;
+}
+.confirmar-no { background: #e8e4f3; color: var(--texto-oscuro); box-shadow: 0 0.7vh 0 #b9b1d6; }
+.confirmar-si { background: var(--rosa); color: #fff; box-shadow: 0 0.7vh 0 #9c0048; }
+/* Botón marcado (control remoto con flechas): bien visible */
+.confirmar-botones button:focus { outline: 0.7vh solid var(--dorado); outline-offset: 0.5vh; transform: scale(1.08); }
 
 .confeti {
   position: fixed;

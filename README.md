@@ -18,12 +18,16 @@ Juego de preguntas estilo Kahoot para proyectar en la tele, con hasta 20 celular
 3. Con **OK** empieza la partida. Hay **20 preguntas de cultura general de nivel intermedio** (música, cine, deportes y cultura general) y cada partida usa 20, así que salen todas, en orden al azar. Si agregás más preguntas, se eligen 20 al azar sin repetir entre partidas hasta que salieron todas. Cada pregunta termina cuando se acaba el tiempo o cuando respondieron todos.
 4. En los resultados, **OK** pasa a la siguiente pregunta. Después de la última: **OK** → podio → **OK** → tabla final con todos → **OK** → partida nueva.
 
+### Reiniciar la partida
+
+Durante la partida hay un botón **↺ Nueva partida** abajo a la derecha: se toca con el puntero del control remoto (o con el mouse) y pide confirmación. Si la tele se maneja con flechas, queda marcado **Cancelar** por defecto; las flechas cambian de botón, **OK** elige y **Atrás** cancela. Los puntos vuelven a cero y los jugadores conectados siguen adentro. Recargar la página **no** reinicia: retoma la partida donde estaba.
+
 ### Teclas en la TV
 
 | Tecla | Acción |
 |---|---|
 | `OK` / `Enter` / espacio / `→` | Avanzar |
-| `N` | Partida nueva (pide confirmación) |
+| `N` (o la tecla roja del control, si la tele la deja pasar) | Partida nueva (pide confirmación) |
 | `F` | Pantalla completa |
 | `M` | Silenciar |
 

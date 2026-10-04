@@ -73,6 +73,11 @@ const el = {
   avisoSonido: $('#avisoSonido'),
   mudo: $('#mudo'),
   confeti: $('#confeti'),
+  botonReiniciar: $('#botonReiniciar'),
+  atajos: $('#atajos'),
+  confirmar: $('#confirmar'),
+  confirmarNo: $('#confirmarNo'),
+  confirmarSi: $('#confirmarSi'),
 };
 
 /** Navegadores de Smart TV: menos confeti y sin efectos caros, para que no se trabe. */
@@ -125,6 +130,9 @@ function habilitados() {
 
 function mostrarPantalla(nombre) {
   Object.keys(el.pantallas).forEach((clave) => { el.pantallas[clave].hidden = clave !== nombre; });
+  el.botonReiniciar.hidden = nombre === 'lobby' || nombre === 'configurar';
+  // Los atajos solo en la sala de espera; durante la partida está el botón
+  el.atajos.hidden = !el.botonReiniciar.hidden;
 }
 
 function toast(texto, ms = 3500) {
@@ -563,9 +571,13 @@ async function terminarPregunta() {
   terminando = true;
   detenerReloj();
   dejarDeEscucharRespuestas();
+  const partida = estado.partida;
+  const indice = estado.indice;
   try {
     // Se vuelven a leer las respuestas para no perder ninguna de último momento
     respuestas = (await sala.child(`respuestas/${claveRespuestas()}`).once('value')).val() || {};
+    // Si mientras tanto se reinició la partida, estos puntos ya no corresponden
+    if (estado.partida !== partida || estado.indice !== indice || estado.fase !== 'pregunta') return;
     await aplicarPuntos();
     mostrarResultados();
     sonido.tocar('revelar');
@@ -802,11 +814,55 @@ async function nuevaPartida() {
     cambios[`jugadores/${id}/racha`] = 0;
     cambios[`jugadores/${id}/ultima`] = null;
   });
-  await sala.update(cambios);
+  // Primero se corta todo lo de la partida anterior (reloj, respuestas) y después se guarda
+  detenerReloj();
+  dejarDeEscucharRespuestas();
   estado = cambios.estado;
   terminando = false;
+  await sala.update(cambios);
   mostrarLobby();
   toast('¡Partida nueva! Los puntos volvieron a cero.');
+}
+
+/* ---------------------------------------------------------
+   Reiniciar desde la tele (botón de la esquina, tecla N o tecla roja)
+   --------------------------------------------------------- */
+
+const confirmacionAbierta = () => !el.confirmar.hidden;
+
+function pedirNuevaPartida() {
+  if (!sala) return;
+  el.confirmar.hidden = false;
+  el.confirmarNo.focus(); // por defecto queda marcado Cancelar
+}
+
+function cerrarConfirmacion() {
+  el.confirmar.hidden = true;
+  if (document.activeElement) document.activeElement.blur();
+}
+
+el.botonReiniciar.addEventListener('click', pedirNuevaPartida);
+el.confirmarNo.addEventListener('click', cerrarConfirmacion);
+el.confirmarSi.addEventListener('click', () => {
+  cerrarConfirmacion();
+  accion(nuevaPartida);
+});
+// Tocar afuera de la caja cancela
+el.confirmar.addEventListener('click', (e) => { if (e.target === el.confirmar) cerrarConfirmacion(); });
+
+/** Teclas mientras está abierta la confirmación: flechas cambian de botón, OK elige, Atrás cancela. */
+function teclaEnConfirmacion(e) {
+  const atras = e.key === 'Escape' || e.key === 'Backspace' || e.keyCode === 10009 || e.keyCode === 461;
+  if (atras) {
+    cerrarConfirmacion();
+  } else if (/^Arrow/.test(e.key)) {
+    (document.activeElement === el.confirmarNo ? el.confirmarSi : el.confirmarNo).focus();
+  } else if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13) {
+    (document.activeElement === el.confirmarSi ? el.confirmarSi : el.confirmarNo).click();
+  } else {
+    return;
+  }
+  e.preventDefault();
 }
 
 /* ---------------------------------------------------------
@@ -842,12 +898,17 @@ const TECLAS_AVANZAR = ['Enter', ' ', 'PageDown', 'ArrowRight', 'MediaPlayPause'
 document.addEventListener('keydown', (e) => {
   if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
   activarTV();
+  if (confirmacionAbierta()) {
+    teclaEnConfirmacion(e);
+    return;
+  }
   const tecla = e.key.toLowerCase();
   if (TECLAS_AVANZAR.indexOf(e.key) !== -1 || e.keyCode === 13) {
     e.preventDefault();
     avanzar();
-  } else if (tecla === 'n') {
-    if (sala && confirm('¿Empezar una partida nueva? Los puntos vuelven a cero.')) accion(nuevaPartida);
+  } else if (tecla === 'n' || e.keyCode === 403) { // 403: tecla roja de muchos controles de Smart TV
+    e.preventDefault();
+    pedirNuevaPartida();
   } else if (tecla === 'f') {
     if (document.fullscreenElement) sinErrores(document.exitFullscreen());
     else if (document.documentElement.requestFullscreen) sinErrores(document.documentElement.requestFullscreen());
